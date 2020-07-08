@@ -1,11 +1,14 @@
 {
-  "name": "ppx_examples",
+  "name": "ppx_lenses",
   "esy": {
     "build": "dune build -p #{self.name}"
   },
+  "release": {
+      "releasedBinaries": ["bin.exe"]
+    },
   "dependencies": {
     "@esy-ocaml/reason": ">= 3.4.0 < 3.6.0",
-    "@opam/dune": "*",
+    "@opam/dune": "2.0.1",
     "@opam/ppxlib": "0.10.0",
     "ocaml": "~4.6.1000"
   },

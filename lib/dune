@@ -1,6 +1,6 @@
 (library
-  (name ppx_examples)
-  (public_name ppx_examples.lib)
+  (name ppx_lenses)
+  (public_name ppx_lenses.lib)
   (kind ppx_rewriter)
   (libraries ppxlib)
   (preprocess (pps ppxlib.metaquot ppxlib.runner))
