@@ -1,5 +1,5 @@
 {
-  "name": "ppx_lenses",
+  "name": "ppx_properties",
   "esy": {
     "build": "dune build -p #{self.name}"
   },

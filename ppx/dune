@@ -1,5 +1,5 @@
 (executable
   (name ppx)
-  (public_name ppx_lenses)
-  (libraries ppx_lenses.lib)
+  (public_name ppx_properties)
+  (libraries ppx_properties.lib)
 )
