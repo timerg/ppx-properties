@@ -15,5 +15,8 @@
     "@opam/ppxlib": "0.10.0",
     "ocaml": "~4.6.1000"
   },
-  "devDependencies": { "@opam/merlin": "*", "ocaml": "~4.6.1000" }
+  "devDependencies": { "@opam/merlin": "*", "ocaml": "~4.6.1000" },
+  "scripts": {
+    "postinstall": "node ./postinstall.js"
+  }
 }
