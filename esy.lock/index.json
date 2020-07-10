@@ -1,10 +1,10 @@
 {
   "checksum": "b4959fd19fcbdc35e8c9cb19b332e1b9",
-  "root": "ppx_lenses@link-dev:./package.json",
+  "root": "ppx_properties@link-dev:./package.json",
   "node": {
-    "ppx_lenses@link-dev:./package.json": {
-      "id": "ppx_lenses@link-dev:./package.json",
-      "name": "ppx_lenses",
+    "ppx_properties@link-dev:./package.json": {
+      "id": "ppx_properties@link-dev:./package.json",
+      "name": "ppx_properties",
       "version": "link-dev:./package.json",
       "source": {
         "type": "link-dev",

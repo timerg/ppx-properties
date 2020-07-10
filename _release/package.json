@@ -1,0 +1,7 @@
+{
+  "license": "MIT",
+  "name": "ppx_properties",
+  "version": "0.1.1",
+  "scripts": { "postinstall": "node ./esyInstallRelease.js" },
+  "bin": { "ppx_properties": "bin/ppx_properties" }
+}

@@ -1,11 +1,14 @@
 {
+  "version": "0.1.1",
   "name": "ppx_properties",
   "esy": {
-    "build": "dune build -p #{self.name}"
+    "build": "dune build -p #{self.name}",
+    "buildsInSource": "_build",
+    "release": {
+      "bin": ["ppx_properties"]
+    }
   },
-  "release": {
-      "releasedBinaries": ["bin.exe"]
-    },
+  "license": "MIT",
   "dependencies": {
     "@esy-ocaml/reason": ">= 3.4.0 < 3.6.0",
     "@opam/dune": "2.0.1",
