@@ -6,35 +6,81 @@ name: RELEASE
 # events but only for the master branch
 on:
   pull_request:
-    branches: [ master ]
-
+  push:
+    branches: master
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  generate:
+  build:
     name: Build
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [macos-latest, ubuntu-latest, windows-latest]
+        operating-system: [macos-latest, ubuntu-latest]
         ocaml-version: [ '4.6.1000' ]
+        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v1.1.0
-    - name: Install esy
-      run: npm install -g esy
-    - name: Override esy version
-      uses: giltho/esy-override-action@v0.0.3
-    - name: Esy install
-      run: esy install
-    - name: Esy build
-      run: esy build
-      with:
-        ocaml-version: ${{ matrix.ocaml-version }}
-    - name: Upload the artifacts
-      uses: skx/github-action-publish-binaries@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: 'example-*'
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install esy
+        run: npm install -g esy@latest cross-env
+      - name: Restore Cache
+        id: restore-cache
+        uses: actions/cache@v2
+        with:
+          path: _export
+          key:  ${{ matrix.operating-system }}-esy-${{ hashFiles('ppx/esy.lock/index.json') }}
+          restore-keys: |
+            ${{ matrix.operating-system }}-esy-
+      - name: Build with cache=
+        run: |
+          cd ppx
+          esy install
+          esy import-dependencies _export
+          rm -rf _export
+          esy build
+      - name: Setting dependency cache
+        run: |
+          esy export-dependencies
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+      - name: Upload Artifacts
+        uses: 'actions/upload-artifact@v2'
+        with:
+            name: artifact-${{ matrix.operating-system }}
+            path: ppx/_build/default/ppx/ppx.exe
+  publish:
+    needs: build
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Download linux artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact-ubuntu-latest
+          path: ppx/binaries/linux
+      - name: Download macos artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact-macos-latest
+          path: ppx/binaries/darwin
+      - name: Move artifacts
+        run: |
+          mv ppx/binaries/darwin/ppx.exe ppx-properties-darwin-x64.exe
+          mv ppx/binaries/linux/ppx.exe ppx-properties-linux-x64.exe
+          rm -rf ppx/binaries
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply automatic changes
+          # Optional options appended to `git-commit`
+          # Optional glob pattern of files which should be added to the commit
+          file_pattern: ppx-properties-*.exe
+          # Optional options appended to `git-push`
+          push_options: '--force'
+
+
+

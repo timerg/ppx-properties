@@ -1,19 +1,7 @@
 {
-  "version": "0.1.1",
-  "name": "ppx_properties",
-  "esy": {
-    "build": "dune build -p #{self.name}",
-    "buildsInSource": "_build",
-    "release": {
-      "bin": ["ppx_properties"]
-    }
-  },
   "license": "MIT",
-  "dependencies": {
-    "@esy-ocaml/reason": ">= 3.4.0 < 3.6.0",
-    "@opam/dune": "2.0.1",
-    "@opam/ppxlib": "0.10.0",
-    "ocaml": "~4.6.1000"
-  },
-  "devDependencies": { "@opam/merlin": "*", "ocaml": "~4.6.1000" }
+  "name": "ppx_properties",
+  "version": "0.1.0",
+  "scripts": { "postinstall": "node ./postinstall.js" },
+  "bin": { "ppx": "ppx" }
 }
