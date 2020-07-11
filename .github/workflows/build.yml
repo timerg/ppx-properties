@@ -31,12 +31,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _export
-          key:  ${{ matrix.operating-system }}-esy-${{ hashFiles('ppx/esy.lock/index.json') }}
+          key:  ${{ matrix.operating-system }}-esy-${{ hashFiles('properties/esy.lock/index.json') }}
           restore-keys: |
             ${{ matrix.operating-system }}-esy-
       - name: Build with cache=
         run: |
-          cd ppx
+          cd properties
           esy install
           esy import-dependencies _export
           rm -rf _export
@@ -49,7 +49,7 @@ jobs:
         uses: 'actions/upload-artifact@v2'
         with:
             name: artifact-${{ matrix.operating-system }}
-            path: ppx/_build/default/ppx/ppx.exe
+            path: properties/_build/default/ppx/ppx.exe
   publish:
     needs: build
     name: Publish
@@ -62,17 +62,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: artifact-ubuntu-latest
-          path: ppx/binaries/linux
+          path: properties/binaries/linux
       - name: Download macos artifacts
         uses: actions/download-artifact@v2
         with:
           name: artifact-macos-latest
-          path: ppx/binaries/darwin
+          path: properties/binaries/darwin
       - name: Move artifacts
         run: |
-          mv ppx/binaries/darwin/ppx.exe ppx-properties-darwin-x64.exe
-          mv ppx/binaries/linux/ppx.exe ppx-properties-linux-x64.exe
-          rm -rf ppx/binaries
+          mv properties/binaries/darwin/ppx.exe ppx-properties-darwin-x64.exe
+          mv properties/binaries/linux/ppx.exe ppx-properties-linux-x64.exe
+          rm -rf properties/binaries
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply automatic changes
