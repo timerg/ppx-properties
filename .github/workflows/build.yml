@@ -43,6 +43,7 @@ jobs:
           esy build
       - name: Setting dependency cache
         run: |
+          cd properties
           esy export-dependencies
         if: steps.restore-cache.outputs.cache-hit != 'true'
       - name: Upload Artifacts
